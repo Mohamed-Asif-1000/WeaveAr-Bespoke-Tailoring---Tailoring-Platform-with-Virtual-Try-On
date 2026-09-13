@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap');
+@import "tailwindcss";
+
+/* Optional: Set a default font for the whole app */
+body {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* ============================================================
+   Bootstrap-compatible .container (kept pixel-identical, now
+   self-contained in plain CSS — no Bootstrap dependency).
+   Mirrors Bootstrap 5 exactly so the UI does not change:
+   width 100%, centering, 0.75rem gutters, px-based max-widths
+   at 576/768/992/1200/1400 viewports.
+   ============================================================ */
+.container {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * .5);
+  padding-left: calc(var(--bs-gutter-x) * .5);
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+/* Checkout form input styling */
+.input {
+  border: 1px solid #D1D5DB;
+  padding: 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s;
+}
+.input:focus {
+  border-color: #D4AF37;
+}
