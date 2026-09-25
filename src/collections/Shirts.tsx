@@ -17,7 +17,9 @@ export default function Shirts() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchQuery = (searchParams.get("search") ?? "").trim();
-  const shirtProducts = products.filter((p) => p.category === "shirts");
+  const shirtProducts = products.filter(
+    (p) => p.category === "artisanal-shirt" || p.category === "shirts"
+  );
 
   const filtered = shirtProducts.filter((p) => {
     const matchesTag =

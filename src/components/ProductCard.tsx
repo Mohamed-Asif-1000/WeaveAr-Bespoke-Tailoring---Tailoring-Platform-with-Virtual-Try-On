@@ -1,7 +1,9 @@
 import { useLayoutEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Camera, Heart, ShoppingBag } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { Product } from "../data/products";
 
 // Your imports
 import Suits from "../assets/suit-01.jpg"
@@ -22,37 +24,37 @@ export default function Collections() {
       title: "The Bespoke Suit",
       desc: "Experience the pinnacle of tailoring with our signature hand-canvassed suits.",
       image: Suits,
-      link: "/collections/shirts"
+      link: "/category/bespoke-suit"
     },
     {
       title: "Artisanal Shirts",
       desc: "Hand-cut from the world's finest mills, designed for a perfect silhouette.",
       image: Shirts,
-      link: "/collections/shirts"
+      link: "/category/artisanal-shirt"
     },
     {
       title: "Wedding Wear",
       desc: "Command presence on your special day with masterfully crafted ceremonial attire.",
       image: WeddingWear,
-      link: "/collections/shirts"
+      link: "/category/wedding-wear"
     },
     {
       title: "Formalwear",
       desc: "Timeless elegance for the modern gentleman's evening wardrobe.",
       image: Formalwear,
-      link: "/collections/shirts"
+      link: "/category/formal-wear"
     },
     {
       title: "Casual Tailoring",
       desc: "Relaxed structures meeting premium fabrics for elevated everyday wear.",
       image: CasualTailoring,
-      link: "/collections/shirts"
+      link: "/category/casual-tailoring"
     },
     {
       title: "Custom Design",
       desc: "Your vision, our craftsmanship. Completely unique pieces made to order.",
       image: CustomeDesign,
-      link: "/collections/shirts"
+      link: "/category/custom-design"
     }
   ];
 
@@ -61,13 +63,15 @@ export default function Collections() {
       gsap.from(".collection-card", {
         scrollTrigger: {
           trigger: ".collections-grid",
-          start: "top 85%",
+          start: "top 90%",
+          once: true,
         },
-        y: 60,
+        y: 40,
         opacity: 0,
-        duration: 1.4,
-        stagger: 0.15,
-        ease: "power4.out",
+        duration: 0.8,
+        stagger: 0.08,
+        ease: "power3.out",
+        clearProps: "transform,opacity",
       });
     }, sectionRef);
 
@@ -109,13 +113,9 @@ export default function Collections() {
                 <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
               </div>
 
-              {/* ===== Content ===== */}
-              <div className="absolute inset-0 p-10 flex flex-col justify-end z-20">
-                <span className="text-[#D4AF37] text-[10px] tracking-[4px] uppercase mb-4 block opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                  New Season
-                </span>
-                
-                <h3 className="text-3xl mb-4 font-serif tracking-wide leading-none">
+          {/* ===== Content ===== */}
+          <div className="absolute inset-0 p-10 flex flex-col justify-end z-20">
+            <h3 className="text-3xl mb-4 font-serif tracking-wide leading-none">
                   {item.title}
                 </h3>
 
@@ -139,5 +139,159 @@ export default function Collections() {
         </div>
       </div>
     </section>
+  );
+}
+
+interface ProductCardTileProps {
+  product: Product;
+  isWishlisted: boolean;
+  addedToCart: boolean;
+  onAddToCart: (product: Product) => void;
+  onToggleWishlist: (id: string) => void;
+  onTryOn: (product: Product) => void;
+}
+
+export function ProductCardTile({
+  product,
+  isWishlisted,
+  addedToCart,
+  onAddToCart,
+  onToggleWishlist,
+  onTryOn,
+}: ProductCardTileProps) {
+  const isComingSoon = product.category !== "artisanal-shirt";
+  const isAvailable = !isComingSoon && product.inStock;
+  const disabledClass = "cursor-not-allowed opacity-40";
+
+  return (
+    <div
+      className={`category-card group border transition-colors ${
+        isComingSoon
+          ? "border-gray-300 bg-[#E9E7E2]"
+          : "border-gray-200 hover:border-[#D4AF37]/40 bg-white"
+      }`}
+    >
+      <div className="relative h-80 overflow-hidden">
+        {isAvailable ? (
+          <Link to={`/product/${product.id}`}>
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+          </Link>
+        ) : (
+          <>
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover grayscale opacity-45"
+            />
+            <div className="absolute inset-0 bg-[#1A1A1A]/45" />
+          </>
+        )}
+
+        {(isComingSoon || !product.inStock) && (
+          <span className="absolute top-5 left-5 bg-[#1A1A1A] text-[#D4AF37] px-4 py-2 text-[10px] tracking-[3px] uppercase z-10">
+            {isComingSoon ? "Coming Soon" : "Out of Stock"}
+          </span>
+        )}
+      </div>
+
+      <div className={`p-8 ${isComingSoon ? "text-gray-700" : ""}`}>
+        <div className="flex items-start justify-between gap-4">
+          {isAvailable ? (
+            <Link to={`/product/${product.id}`} className="flex-1">
+              <h3 className="text-lg font-serif mb-2 tracking-wide">
+                {product.name}
+              </h3>
+            </Link>
+          ) : (
+            <h3 className="text-lg font-serif mb-2 tracking-wide flex-1">
+              {product.name}
+            </h3>
+          )}
+
+          {isComingSoon && (
+            <span className="text-[10px] tracking-[2px] uppercase text-gray-500 shrink-0">
+              Planned
+            </span>
+          )}
+        </div>
+
+        <p className="text-sm leading-relaxed text-gray-600 mb-5">
+          {product.description}
+        </p>
+        <p className="text-gray-700 font-medium mb-6">{product.price}</p>
+
+        <div className="grid grid-cols-1 gap-3">
+          <button
+            type="button"
+            disabled={!isAvailable}
+            onClick={() => {
+              if (isAvailable) onAddToCart(product);
+            }}
+            className={`min-h-10 px-4 py-3 text-[10px] tracking-[2px] uppercase flex items-center justify-center gap-2 transition ${
+              isAvailable
+                ? "bg-[#D4AF37] text-white hover:opacity-90"
+                : `bg-gray-400 text-gray-600 ${disabledClass}`
+            }`}
+            title={isAvailable ? "Add to cart" : "This service will be available soon"}
+          >
+            <ShoppingBag size={15} />
+            {addedToCart ? "Added" : "Add to Cart"}
+          </button>
+
+          <button
+            type="button"
+            disabled={!isAvailable}
+            onClick={() => {
+              if (isAvailable) onToggleWishlist(product.id);
+            }}
+            className={`min-h-10 px-4 py-3 text-[10px] tracking-[2px] uppercase flex items-center justify-center gap-2 border transition ${
+              isAvailable
+                ? "border-gray-300 text-gray-700 hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                : `border-gray-400 text-gray-500 ${disabledClass}`
+            }`}
+            title={isAvailable ? "Add to wishlist" : "This service will be available soon"}
+            aria-label={isAvailable ? "Add to wishlist" : "Coming soon"}
+          >
+            <Heart
+              size={15}
+              className={isWishlisted ? "fill-[#D4AF37] text-[#D4AF37]" : ""}
+            />
+            {isWishlisted ? "Wishlisted" : "Add to Wishlist"}
+          </button>
+
+          {isAvailable ? (
+            <Link
+              to={`/try-on-preview/${product.id}`}
+              onClick={() => onTryOn(product)}
+              className="min-h-10 px-4 py-3 text-[10px] tracking-[2px] uppercase flex items-center justify-center gap-2 bg-[#1A1A1A] text-[#D4AF37] hover:bg-[#2D2A26] transition"
+            >
+              <Camera size={15} />
+              Virtual Try-On
+            </Link>
+          ) : (
+            <button
+              type="button"
+              disabled
+              className={`min-h-10 px-4 py-3 text-[10px] tracking-[2px] uppercase flex items-center justify-center gap-2 border border-gray-400 text-gray-500 ${disabledClass}`}
+              title="This service will be available soon"
+            >
+              <Camera size={15} />
+              Try-On
+            </button>
+          )}
+        </div>
+
+        {isComingSoon && (
+          <p className="mt-4 text-xs text-gray-500 italic">
+            This service will be available soon.
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

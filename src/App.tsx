@@ -1,9 +1,11 @@
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { useEffect, type ReactElement } from "react";
 import { preloadPoseModel } from "./utils/preloadModel";
+import { products } from "./data/products";
 // Pages
 import Home from "./pages/Home";
 import Shirts from "./collections/Shirts";
+import CategoryPage from "./pages/CategoryPage";
 import ProductDetails from "./pages/ProductDetails";
 import Checkout from "./pages/CheckOut";
 import Measurements from "./pages/Measurements";
@@ -19,6 +21,8 @@ import Cart from "./pages/Cart";
 import Dashboard from "./pages/Dashboard";
 import Layout from "./components/Layout";
 import { useAuthStore } from "./store/useAuthStore";
+import { useCartStore } from "./store/useCartStore";
+import { useCustomizationStore } from "./store/useCustomizationStore";
 
 function RequireAuth({ children }: { children: ReactElement }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -27,6 +31,50 @@ function RequireAuth({ children }: { children: ReactElement }) {
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
+  return children;
+}
+
+function isAvailableShirt(id: string | undefined) {
+  return products.some(
+    (product) =>
+      product.id === id &&
+      product.category === "artisanal-shirt" &&
+      product.inStock
+  );
+}
+
+function RequireShirtProduct({
+  children,
+  requireCustomization = false,
+}: {
+  children: ReactElement;
+  requireCustomization?: boolean;
+}) {
+  const { id } = useParams<{ id: string }>();
+  const customizationProductId = useCustomizationStore(
+    (state) => state.productId
+  );
+  const isEligible =
+    isAvailableShirt(id) &&
+    (!requireCustomization || customizationProductId === id);
+
+  if (!isEligible) {
+    return <Navigate to="/category/artisanal-shirt" replace />;
+  }
+
+  return children;
+}
+
+function RequireShirtCart({ children }: { children: ReactElement }) {
+  const items = useCartStore((state) => state.items);
+  const hasUnavailableItem = items.some(
+    (item) => !isAvailableShirt(item.productId)
+  );
+
+  if (hasUnavailableItem) {
+    return <Navigate to="/cart" replace />;
+  }
+
   return children;
 }
 
@@ -41,23 +89,62 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/collections/shirts" element={<Shirts />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/fabric-selection/:id" element={<FabricSelection />} />
-          <Route path="/measurements/:id" element={<Measurements />} />
+          <Route path="/category/:category" element={<CategoryPage />} />
+          <Route
+            path="/product/:id"
+            element={
+              <RequireShirtProduct>
+                <ProductDetails />
+              </RequireShirtProduct>
+            }
+          />
+          <Route
+            path="/fabric-selection/:id"
+            element={
+              <RequireShirtProduct>
+                <FabricSelection />
+              </RequireShirtProduct>
+            }
+          />
+          <Route
+            path="/measurements/:id"
+            element={
+              <RequireShirtProduct>
+                <Measurements />
+              </RequireShirtProduct>
+            }
+          />
           <Route
             path="/measurements/manual/:id"
-            element={<ManualMeasurements />}
+            element={
+              <RequireShirtProduct>
+                <ManualMeasurements />
+              </RequireShirtProduct>
+            }
           />
           <Route
             path="/measurements/review/:id"
-            element={<MeasurementReview />}
+            element={
+              <RequireShirtProduct>
+                <MeasurementReview />
+              </RequireShirtProduct>
+            }
           />
-          <Route path="/final-review/:id" element={<FinalReview />} />
+          <Route
+            path="/final-review/:id"
+            element={
+              <RequireShirtProduct requireCustomization>
+                <FinalReview />
+              </RequireShirtProduct>
+            }
+          />
           <Route
             path="/checkout"
             element={
               <RequireAuth>
-                <Checkout />
+                <RequireShirtCart>
+                  <Checkout />
+                </RequireShirtCart>
               </RequireAuth>
             }
           />
@@ -74,7 +161,14 @@ export default function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="/try-on-preview/:id" element={<VirtualTryOnPreview />} />
+        <Route
+          path="/try-on-preview/:id"
+          element={
+            <RequireShirtProduct>
+              <VirtualTryOnPreview />
+            </RequireShirtProduct>
+          }
+        />
       </Routes>
     </>
   );
