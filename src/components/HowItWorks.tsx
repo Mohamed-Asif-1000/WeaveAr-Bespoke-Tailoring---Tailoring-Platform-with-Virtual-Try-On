@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { withMotion } from "../utils/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -8,7 +9,7 @@ export default function HowItWorks() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       // Animate the steps
       gsap.from(".how-step", {
         scrollTrigger: {
@@ -34,9 +35,7 @@ export default function HowItWorks() {
         stagger: 0.2,
         ease: "power3.inOut",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (

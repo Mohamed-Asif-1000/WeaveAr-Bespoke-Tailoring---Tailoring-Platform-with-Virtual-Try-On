@@ -1,6 +1,7 @@
 import { useState, useLayoutEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import gsap from "gsap";
+import { withMotion } from "../utils/motion";
 import { useCustomizationStore } from "../store/useCustomizationStore";
 
 interface Measurements {
@@ -36,16 +37,14 @@ export default function ManualMeasurements() {
   const [measurements, setMeasurements] = useState<Measurements>(EMPTY_MEASUREMENTS);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".measure-step", {
         y: 30,
         opacity: 0,
         duration: 0.8,
         ease: "power3.out",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, [step]);
 
   const updateMeasurement = (key: keyof Measurements, value: string) => {
@@ -68,7 +67,7 @@ export default function ManualMeasurements() {
   return (
     <section
       ref={sectionRef}
-      className="bg-[#FAF9F6] min-h-screen text-gray-900"
+      className="bg-[#FAF9F6] min-h-dvh text-gray-900"
     >
       <div className="container mx-auto px-6 py-28 max-w-4xl">
 

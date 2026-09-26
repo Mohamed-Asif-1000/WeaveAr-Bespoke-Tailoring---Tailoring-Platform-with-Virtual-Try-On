@@ -50,7 +50,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="bg-[#FAF9F6] text-gray-900 min-h-screen">
+      <section className="bg-[#FAF9F6] text-gray-900 min-h-dvh">
         {/* Hero */}
         <div className="bg-[#1A1A1A] text-[#FAF9F6]">
           <div className="container mx-auto px-6 py-24 max-w-6xl">
@@ -230,6 +230,8 @@ function OrdersTab() {
                     src={item.image}
                     alt={item.name}
                     className="w-14 h-16 object-cover border"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="flex-1">
                     <p className="font-medium">{item.name}</p>

@@ -10,7 +10,7 @@ export default function Wishlist() {
 
   return (
     <>
-      <section className="bg-[#FAF9F6] text-gray-900 min-h-screen">
+      <section className="bg-[#FAF9F6] text-gray-900 min-h-dvh">
         {/* Hero */}
         <div className="bg-[#1A1A1A] text-[#FAF9F6]">
           <div className="container mx-auto px-6 py-32 max-w-5xl">
@@ -62,6 +62,8 @@ export default function Wishlist() {
                         src={product.image}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
                     </div>

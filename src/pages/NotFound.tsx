@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
-    <section className="bg-[#FAF9F6] min-h-screen flex items-center justify-center text-gray-900">
+    <section className="bg-[#FAF9F6] min-h-dvh flex items-center justify-center text-gray-900">
       <div className="text-center px-6">
         <p className="text-[10px] tracking-[6px] uppercase text-[#D4AF37] mb-6 font-bold">
           Error 404

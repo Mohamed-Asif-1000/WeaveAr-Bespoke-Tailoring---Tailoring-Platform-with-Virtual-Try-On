@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Instagram, Linkedin, X, Phone} from "lucide-react"; 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { withMotion } from "../utils/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,7 +11,7 @@ export default function Footer() {
   const footerRef = useRef(null);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(footerRef.current, () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: footerRef.current,
@@ -38,9 +39,7 @@ export default function Footer() {
         ease: "power2.out",
       }, "-=0.8");
 
-    }, footerRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (

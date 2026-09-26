@@ -6,47 +6,19 @@ body {
   font-family: 'Cormorant Garamond', serif;
 }
 
-/* ============================================================
-   Bootstrap-compatible .container (kept pixel-identical, now
-   self-contained in plain CSS — no Bootstrap dependency).
-   Mirrors Bootstrap 5 exactly so the UI does not change:
-   width 100%, centering, 0.75rem gutters, px-based max-widths
-   at 576/768/992/1200/1400 viewports.
-   ============================================================ */
-.container {
-  --bs-gutter-x: 1.5rem;
-  --bs-gutter-y: 0;
-  width: 100%;
-  padding-right: calc(var(--bs-gutter-x) * .5);
-  padding-left: calc(var(--bs-gutter-x) * .5);
-  margin-right: auto;
-  margin-left: auto;
-}
-@media (min-width: 576px) {
-  .container {
-    max-width: 540px;
-  }
-}
-@media (min-width: 768px) {
-  .container {
-    max-width: 720px;
-  }
-}
-@media (min-width: 992px) {
-  .container {
-    max-width: 960px;
-  }
-}
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1140px;
-  }
-}
-@media (min-width: 1400px) {
-  .container {
-    max-width: 1320px;
-  }
-}
+/* `container` is Tailwind's own utility. The previous hand-rolled
+   Bootstrap-compatible block was declared outside any cascade layer, so it
+   beat every `max-w-*` and `px-*` utility applied to the same element, which
+   capped content at 540px on tablets and silently killed the gutters.
+
+   No `overflow-x` guard is set here. An earlier `overflow-x: clip` on `html`
+   was masking real overflow rather than fixing it: it suppressed
+   `document.documentElement.scrollWidth`, so the responsive suite's
+   `scrollWidth === innerWidth` assertion passed no matter what the layout did.
+   It did not weaken the suite's culprit detection, because that check walks
+   ancestors only as far as `document.body` and never inspects `html`. The
+   guard is therefore removed rather than relied upon, and every route is
+   verified overflow-free at 320px and 768px on its own merits. */
 
 /* Checkout form input styling */
 .input {
@@ -59,3 +31,4 @@ body {
 .input:focus {
   border-color: #D4AF37;
 }
+

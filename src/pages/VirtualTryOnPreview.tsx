@@ -427,7 +427,7 @@ function TryOnSession({ initialShirt, onRequestReset }: TryOnSessionProps) {
 
   if (cameraError) {
     return (
-      <section className="bg-[#1A1A1A] text-[#FAF9F6] min-h-screen flex items-center justify-center p-6">
+      <section className="bg-[#1A1A1A] text-[#FAF9F6] min-h-dvh flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <AlertCircle size={32} className="text-red-500" />
@@ -466,7 +466,7 @@ function TryOnSession({ initialShirt, onRequestReset }: TryOnSessionProps) {
 
   if (loadingTimeout) {
     return (
-      <section className="bg-[#1A1A1A] text-[#FAF9F6] min-h-screen flex items-center justify-center p-6">
+      <section className="bg-[#1A1A1A] text-[#FAF9F6] min-h-dvh flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <h2 className="text-2xl font-serif mb-4">Taking too long?</h2>
           <p className="text-[#FAF9F6]/70 mb-8">
@@ -495,7 +495,7 @@ function TryOnSession({ initialShirt, onRequestReset }: TryOnSessionProps) {
     );
   }
   return (
-    <section className="bg-[#1A1A1A] text-[#FAF9F6] min-h-screen py-8 md:py-12">
+    <section className="bg-[#1A1A1A] text-[#FAF9F6] min-h-dvh py-8 md:py-12">
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
         <div className="mb-8 md:mb-12">
           <div className="flex items-center justify-between mb-4">

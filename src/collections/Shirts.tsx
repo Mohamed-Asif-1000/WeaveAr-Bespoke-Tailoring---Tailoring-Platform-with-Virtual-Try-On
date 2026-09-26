@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Heart, X } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { withMotion } from "../utils/motion";
 import { products } from "../data/products";
 import { useWishlistStore } from "../store/useWishlistStore";
 
@@ -17,9 +18,10 @@ export default function Shirts() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchQuery = (searchParams.get("search") ?? "").trim();
-  const shirtProducts = products.filter(
-    (p) => p.category === "artisanal-shirt" || p.category === "shirts"
-  );
+  // Products are tagged with the category slug, which is what /category/:slug
+  // matches on. "shirts" is the id of the collection entry in `categories`, not
+  // a product category, so it never matched anything.
+  const shirtProducts = products.filter((p) => p.category === "artisanal-shirt");
 
   const filtered = shirtProducts.filter((p) => {
     const matchesTag =
@@ -40,7 +42,7 @@ export default function Shirts() {
   };
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".shirt-card", {
         scrollTrigger: {
           trigger: ".shirts-grid",
@@ -52,9 +54,7 @@ export default function Shirts() {
         stagger: 0.15,
         ease: "power4.out",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (
@@ -148,6 +148,8 @@ export default function Shirts() {
                       src={shirt.image}
                       alt={shirt.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
                   </div>

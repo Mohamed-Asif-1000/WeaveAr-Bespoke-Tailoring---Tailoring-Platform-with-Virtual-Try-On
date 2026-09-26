@@ -5,7 +5,7 @@ export default function Measurements() {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <section className="bg-[#FAF9F6] text-gray-900 min-h-screen">
+    <section className="bg-[#FAF9F6] text-gray-900 min-h-dvh">
       <div className="container mx-auto px-6 py-32 max-w-5xl">
 
         {/* Header */}

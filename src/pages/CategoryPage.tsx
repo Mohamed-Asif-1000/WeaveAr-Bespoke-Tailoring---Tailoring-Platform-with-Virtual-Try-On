@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { X } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { withMotion } from "../utils/motion";
 import type { Product } from "../data/products";
 import { products } from "../data/products";
 import { ProductCardTile } from "../components/ProductCard";
@@ -121,7 +122,7 @@ export default function CategoryPage() {
   };
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".category-card", {
         scrollTrigger: {
           trigger: ".category-grid",
@@ -133,9 +134,7 @@ export default function CategoryPage() {
         stagger: 0.15,
         ease: "power4.out",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, [category]);
 
   return (

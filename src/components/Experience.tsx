@@ -1,9 +1,10 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Client01 from "../assets/testimonial-01.png"
-import Client02 from "../assets/testimonial-02.png"
-import Client03 from "../assets/testimonial-03.png"
+import { withMotion } from "../utils/motion";
+import Client01 from "../assets/testimonial-01.jpg"
+import Client02 from "../assets/testimonial-02.jpg"
+import Client03 from "../assets/testimonial-03.jpg"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +12,7 @@ export default function Experience() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       // --- 1. PAGE LOAD ANIMATIONS (Immediate) ---
       const tl = gsap.timeline();
       
@@ -36,9 +37,7 @@ export default function Experience() {
         stagger: 0.2,
         ease: "power4.out",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (
@@ -95,6 +94,8 @@ export default function Experience() {
                 src={item.img} 
                 alt={item.name}
                 className="absolute inset-0 w-full h-full object-cover opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000"
+                loading="lazy"
+                decoding="async"
               />
 
               <div className="absolute inset-0 bg-linear-to-t from-white via-white/80 to-transparent z-10" />

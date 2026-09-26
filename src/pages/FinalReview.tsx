@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import gsap from "gsap";
+import { withMotion } from "../utils/motion";
 import { Edit, CheckCircle, Truck } from "lucide-react";
 import { products } from "../data/products";
 import { DEFAULT_FABRIC, formatINR } from "../data/fabrics";
@@ -60,7 +61,7 @@ export default function FinalReview() {
   };
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".review-left > *", {
         y: 30,
         opacity: 0,
@@ -76,15 +77,13 @@ export default function FinalReview() {
         ease: "power3.out",
         delay: 0.2,
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="bg-[#FAF9F6] min-h-screen text-gray-900"
+      className="bg-[#FAF9F6] min-h-dvh text-gray-900"
     >
       <div className="container mx-auto px-6 py-24 max-w-7xl">
 
@@ -115,6 +114,8 @@ export default function FinalReview() {
                 src={product.image}
                 alt={product.name}
                 className="w-full h-130 object-cover"
+                loading="lazy"
+                decoding="async"
               />
               <div className="p-6 flex justify-between items-center">
                 <p className="text-xl font-serif">{product.name}</p>

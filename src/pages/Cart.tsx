@@ -14,7 +14,7 @@ export default function Cart() {
 
   return (
     <>
-      <section className="bg-[#FAF9F6] text-gray-900 min-h-screen">
+      <section className="bg-[#FAF9F6] text-gray-900 min-h-dvh">
         {/* Hero */}
         <div className="bg-[#1A1A1A] text-[#FAF9F6]">
           <div className="container mx-auto px-6 py-28 max-w-5xl">
@@ -58,6 +58,8 @@ export default function Cart() {
                         src={item.image}
                         alt={item.name}
                         className="w-32 h-36 object-cover border"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </Link>
 

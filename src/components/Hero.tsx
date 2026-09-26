@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
+import { withMotion } from "../utils/motion";
 import HeroImage from "../assets/hero-image-01.jpg"
 
 export default function Hero() {
@@ -9,7 +10,7 @@ export default function Hero() {
   const bgRef = useRef(null);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(containerRef.current, () => {
       // 1. STAGGERED TEXT ENTRANCE (Left Side)
       gsap.from(".hero-content", {
         x: -30,
@@ -29,7 +30,10 @@ export default function Hero() {
       });
 
       // 3. THE CENTER-SPLIT BLUR REVEAL
-      // We start with the image clipped to a thin center strip and heavily blurred
+      // We start with the image clipped to a thin center strip and heavily blurred.
+      // willChange is scoped to the reveal: pinning "clip-path, filter" in markup
+      // kept a compositing layer alive for the life of the page.
+      gsap.set(imageRef.current, { willChange: "clip-path, filter, transform" });
       gsap.fromTo(imageRef.current, 
         { 
           clipPath: "inset(0% 50% 0% 50%)", // Clipped to a vertical center line
@@ -42,7 +46,11 @@ export default function Hero() {
           scale: 1,                        // Settles to normal size
           duration: 2.2,
           ease: "expo.inOut",
-          delay: 0.6
+          delay: 0.6,
+          // The idle float below only touches transform, so keep only that hint.
+          onComplete: () => {
+            gsap.set(imageRef.current, { willChange: "transform" });
+          }
         }
       );
 
@@ -54,9 +62,7 @@ export default function Hero() {
         yoyo: true,
         ease: "sine.inOut"
       });
-    }, containerRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (
@@ -109,7 +115,11 @@ export default function Hero() {
                 src={HeroImage}
                 alt="Bespoke tailoring"
                 className="w-full h-125 object-cover transition-transform duration-1000 group-hover:scale-105"
-                style={{ willChange: "clip-path, filter" }}
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+                width={1200}
+                height={800}
               />
             </div>
             

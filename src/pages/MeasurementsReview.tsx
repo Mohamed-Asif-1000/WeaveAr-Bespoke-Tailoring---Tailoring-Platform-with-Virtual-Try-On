@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import gsap from "gsap";
+import { withMotion } from "../utils/motion";
 import { useCustomizationStore } from "../store/useCustomizationStore";
 
 export default function MeasurementReview() {
@@ -37,7 +38,7 @@ export default function MeasurementReview() {
   ];
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".review-block", {
         y: 30,
         opacity: 0,
@@ -45,15 +46,13 @@ export default function MeasurementReview() {
         stagger: 0.15,
         ease: "power3.out",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="bg-[#FAF9F6] min-h-screen text-gray-900"
+      className="bg-[#FAF9F6] min-h-dvh text-gray-900"
     >
       <div className="container mx-auto px-6 py-28 max-w-5xl">
 

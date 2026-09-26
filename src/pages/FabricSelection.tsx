@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import gsap from "gsap";
+import { withMotion } from "../utils/motion";
 
 import FabricImg from "../assets/hero-image-01.jpg";
 import { fabrics } from "../data/fabrics";
@@ -14,7 +15,7 @@ export default function FabricSelection() {
   const setProduct = useCustomizationStore((s) => s.setProduct);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".fabric-card", {
         y: 40,
         opacity: 0,
@@ -22,9 +23,7 @@ export default function FabricSelection() {
         stagger: 0.15,
         ease: "power3.out",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   const fabricsList = fabrics;
@@ -32,7 +31,7 @@ export default function FabricSelection() {
   return (
     <section
       ref={sectionRef}
-      className="bg-[#FAF9F6] min-h-screen text-gray-900"
+      className="bg-[#FAF9F6] min-h-dvh text-gray-900"
     >
       <div className="container mx-auto px-6 py-28 max-w-6xl">
 
@@ -75,6 +74,8 @@ export default function FabricSelection() {
                   src={FabricImg}
                   alt={fabric.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-black/20"></div>
 

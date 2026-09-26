@@ -80,7 +80,7 @@ function RequireShirtCart({ children }: { children: ReactElement }) {
 
 export default function App() {
   useEffect(() => {
-    preloadPoseModel().catch(err => console.log("Model preload:", err));
+    preloadPoseModel().catch(() => undefined);
   }, []);
 
   return (

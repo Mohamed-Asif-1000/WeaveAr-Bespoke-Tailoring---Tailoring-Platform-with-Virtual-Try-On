@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { withMotion } from "../utils/motion";
 
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -9,7 +10,7 @@ export default function About() {
   const containerRef = useRef(null);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(containerRef.current, () => {
       // --- PAGE LOAD ANIMATIONS ---
       // Staggered entrance for the Intro section
       gsap.from(".about-intro > *", {
@@ -81,9 +82,7 @@ export default function About() {
         duration: 1,
         ease: "power2.out",
       });
-    }, containerRef);
-
-    return () => ctx.revert(); // Cleanup GSAP on unmount
+    });
   }, []);
 
   return (

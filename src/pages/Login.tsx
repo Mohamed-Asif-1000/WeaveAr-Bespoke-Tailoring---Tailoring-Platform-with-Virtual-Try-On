@@ -69,7 +69,7 @@ export default function Login() {
     "w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-[#D4AF37]";
 
   return (
-    <section className="bg-[#FAF9F6] min-h-screen text-gray-900">
+    <section className="bg-[#FAF9F6] min-h-dvh text-gray-900">
       <div className="container mx-auto px-6 py-24 max-w-5xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left: intro */}

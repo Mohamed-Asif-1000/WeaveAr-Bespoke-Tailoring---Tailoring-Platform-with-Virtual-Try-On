@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Heart, ShoppingBag, Check } from "lucide-react";
 import gsap from "gsap";
+import { withMotion } from "../utils/motion";
 import { products } from "../data/products";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useCartStore } from "../store/useCartStore";
@@ -36,7 +37,7 @@ export default function ProductDetails() {
   };
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".product-animate", {
         y: 40,
         opacity: 0,
@@ -44,9 +45,7 @@ export default function ProductDetails() {
         stagger: 0.15,
         ease: "power4.out",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (
@@ -63,6 +62,8 @@ export default function ProductDetails() {
                 src={product.image}
                 alt={product.name}
                 className="w-full h-150 object-cover"
+                loading="lazy"
+                decoding="async"
               />
 
               {/* Badge */}
@@ -82,6 +83,8 @@ export default function ProductDetails() {
                     src={product.image}
                     alt="thumb"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               ))}

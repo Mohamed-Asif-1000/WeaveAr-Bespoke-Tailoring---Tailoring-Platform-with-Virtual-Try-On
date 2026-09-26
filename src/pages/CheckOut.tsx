@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
+import { withMotion } from "../utils/motion";
 import { Lock, CreditCard, Truck } from "lucide-react";
 import PaymentGateway from "./Payment";
 import { useAuthStore } from "../store/useAuthStore";
@@ -50,7 +51,7 @@ export default function Checkout() {
   const total = subtotal + deliveryFee;
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(pageRef.current, () => {
       gsap.from(".checkout-left > *", {
         y: 30,
         opacity: 0,
@@ -66,9 +67,7 @@ export default function Checkout() {
         ease: "power3.out",
         delay: 0.3,
       });
-    }, pageRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   const placeOrder = () => {
@@ -148,7 +147,7 @@ export default function Checkout() {
   return (
     <section
       ref={pageRef}
-      className="bg-[#FAF9F6] min-h-screen text-gray-900"
+      className="bg-[#FAF9F6] min-h-dvh text-gray-900"
     >
       <div className="container mx-auto px-6 py-24 max-w-7xl">
 
@@ -305,6 +304,8 @@ export default function Checkout() {
                         src={item.image}
                         alt={item.name}
                         className="w-16 h-20 object-cover border"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium">{item.name}</p>

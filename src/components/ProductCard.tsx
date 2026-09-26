@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Camera, Heart, ShoppingBag } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { withMotion } from "../utils/motion";
 import type { Product } from "../data/products";
 
 // Your imports
@@ -59,7 +60,7 @@ export default function Collections() {
   ];
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+    return withMotion(sectionRef.current, () => {
       gsap.from(".collection-card", {
         scrollTrigger: {
           trigger: ".collections-grid",
@@ -73,9 +74,7 @@ export default function Collections() {
         ease: "power3.out",
         clearProps: "transform,opacity",
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    });
   }, []);
 
   return (
@@ -108,6 +107,8 @@ export default function Collections() {
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-110 transition-all duration-1000 ease-out"
+                  loading="lazy"
+                  decoding="async"
                 />
                 {/* Gradient Overlay for Text Readability */}
                 <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
@@ -178,6 +179,8 @@ export function ProductCardTile({
               src={product.image}
               alt={product.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
           </Link>
@@ -187,6 +190,8 @@ export function ProductCardTile({
               src={product.image}
               alt={product.name}
               className="w-full h-full object-cover grayscale opacity-45"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-[#1A1A1A]/45" />
           </>

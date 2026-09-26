@@ -413,3 +413,24 @@ export function searchProducts(query: string): Product[] {
       p.description.toLowerCase().includes(lower),
   );
 }
+
+/**
+ * The only category that can be purchased or tried on today. Every other
+ * category is browse-only and sits behind the roadmap gate, so its detail
+ * pages bounce the visitor back to the collection.
+ */
+export const PURCHASABLE_CATEGORY = "artisanal-shirt";
+
+export function isProductAvailable(product: Product): boolean {
+  return product.category === PURCHASABLE_CATEGORY && product.inStock;
+}
+
+/**
+ * Search restricted to products the visitor can actually act on. A result
+ * they cannot open is worse than no result, so roadmap and sold-out items are
+ * withheld from the dropdown.
+ */
+export function searchAvailableProducts(query: string): Product[] {
+  return searchProducts(query).filter(isProductAvailable);
+}
+
