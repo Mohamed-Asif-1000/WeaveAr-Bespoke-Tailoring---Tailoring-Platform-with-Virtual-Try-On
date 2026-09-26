@@ -298,13 +298,13 @@ weavear-stitches/
 
 ## 🔐 Privacy & Security
 
-✅ **Local Processing**: All pose detection happens on your device
-✅ **No Data Transmission**: Camera video is NOT sent to servers
-✅ **No Storage**: Images/video are not stored or logged
-✅ **No Analytics**: No tracking of camera or try-on usage  
-✅ **User Control**: Users have full control over camera permissions  
-✅ **HTTPS Only**: Encrypted connection in production  
-⚠️ **One External Fetch**: The MoveNet model weights are downloaded once from Google's CDN. All pose *processing* then runs locally on your device.
+- ✅ **Local Processing**: All pose detection happens on your device
+- ✅ **No Data Transmission**: Camera video is NOT sent to servers
+- ✅ **No Storage**: Images/video are not stored or logged
+- ✅ **No Analytics**: No tracking of camera or try-on usage
+- ✅ **User Control**: Users have full control over camera permissions
+- ✅ **HTTPS Only**: Encrypted connection in production
+- ⚠️ **One External Fetch**: The MoveNet model weights are downloaded once from Google's CDN. All pose _processing_ then runs locally on your device.
 
 ---
 
@@ -478,4 +478,3 @@ MIT License - See [LICENSE](LICENSE) file for details
 - Real measurements via ML video analysis
 - AR features with 3D models
 - Mobile app version
-
